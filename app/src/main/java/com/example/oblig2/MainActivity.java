@@ -19,6 +19,7 @@ import com.example.oblig2.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -63,7 +64,19 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DBHandler(this);
         db = dbHelper.getWritableDatabase();
 
-        
+        Button btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                addContact(v);
+            }
+        });
+
+        Button btnPrintContacts = (Button) findViewById(R.id.btnPrintContacts);
+        btnPrintContacts.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                printContacts(v);
+            }
+        });
     }
 
 
