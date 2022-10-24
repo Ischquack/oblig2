@@ -2,8 +2,12 @@ package com.example.oblig2;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
     static String TABLE_CONTACTS = "Contacts";
@@ -36,5 +40,23 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_NAME, contact.getName());
         values.put(KEY_TEL, contact.getTel());
         db.insert(TABLE_CONTACTS,null,values);
+    }
+
+    public List<Contact> printContacts(SQLiteDatabase db) {
+        List<Contact> contactList = new ArrayList<Contact>();
+        String selectQuery = "SELECT * FROM " + TABLE_CONTACTS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Contact contact = new Contact();
+                contact.setId(cursor.getInt(0));
+                contact.setName(cursor.getString(1));
+                contact.setTel(cursor.getString(2));
+                contactList.add(contact);
+            }
+            while (cursor.moveToNext());
+            cursor.close();
+        }
+        return contactList;
     }
 }

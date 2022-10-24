@@ -1,5 +1,6 @@
 package com.example.oblig2;
 
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -21,6 +22,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText inName;
@@ -30,17 +33,40 @@ public class MainActivity extends AppCompatActivity {
     DBHandler dbHelper;
     SQLiteDatabase db;
 
+    public void addContact(View v) {
+        Contact contact = new Contact(inName.getText().toString(),
+                inTel.getText().toString());
+        dbHelper.addContact(db, contact);
+    }
+
+    public void printContacts(View v) {
+        String text = "";
+        List<Contact> contacts = dbHelper.printContacts(db);
+        for (Contact contact : contacts) {
+            text = text + "Id: " + contact.getId() + ",Name: " +
+                    contact.getName() + " ,Tel: " +
+                    contact.getTel() + "\n";
+        }
+        printContacts.setText(text);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        inName = (EditText) findViewById(R.id.name);
-        inTel = (EditText) findViewById(R.id.tel);
-        inId = (EditText) findViewById(R.id.id);
-        printContacts = (TextView) findViewById(R.id.printContacts);
+        final Resources res;
+
+        inName = (EditText) findViewById(R.id.etInName);
+        inTel = (EditText) findViewById(R.id.etInTel);
+        inId = (EditText) findViewById(R.id.etInId);
+        printContacts = (TextView) findViewById(R.id.tvPrintContacts);
         dbHelper = new DBHandler(this);
         db = dbHelper.getWritableDatabase();
+
+        
     }
+
+
 
 
 }
