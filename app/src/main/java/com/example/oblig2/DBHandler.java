@@ -1,5 +1,6 @@
 package com.example.oblig2;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,5 +29,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
         onCreate(db);
+    }
+
+    public void addContact(SQLiteDatabase db, Contact contact){
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, contact.getName());
+        values.put(KEY_TEL, contact.getTel());
+        db.insert(TABLE_CONTACTS,null,values);
     }
 }
