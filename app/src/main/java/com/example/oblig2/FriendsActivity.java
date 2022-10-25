@@ -1,15 +1,9 @@
 package com.example.oblig2;
 
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
-
-import com.example.oblig2.databinding.ActivityFriendsBinding;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -61,7 +55,6 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        final Resources res;
 
         inName = (EditText) findViewById(R.id.etInName);
         inTel = (EditText) findViewById(R.id.etInTel);
@@ -71,35 +64,24 @@ public class FriendsActivity extends AppCompatActivity {
         db = dbHelper.getWritableDatabase();
 
         Button btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                addContact(v);
-            }
-        });
+        btnAdd.setOnClickListener(this::addContact);
 
         Button btnPrintContacts = (Button) findViewById(R.id.btnPrintContacts);
-        btnPrintContacts.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                printContacts(v);
-            }
-        });
+        btnPrintContacts.setOnClickListener(this::printContacts);
 
         Button btnDeleteContact = (Button) findViewById(R.id.btnDel);
-        btnDeleteContact.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                deleteContact(v);
-            }
-        });
+        btnDeleteContact.setOnClickListener(this::deleteContact);
 
-        Button btnUpdateContact = (Button) findViewById(R.id.btnDelApp);
-        btnUpdateContact.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                updateContact(v);
-            }
-        });
+        Button btnUpdateContact = (Button) findViewById(R.id.btnUpdateContact);
+        btnUpdateContact.setOnClickListener(this::updateContact);
     }
 
-
+    /*@Override
+    protected void onDestroy() {
+        this.deleteDatabase("DB_AppointmentManager");
+        dbHelper.close();
+        super.onDestroy();
+    }*/
 
 
 }
