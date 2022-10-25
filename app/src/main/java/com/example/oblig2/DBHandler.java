@@ -59,4 +59,18 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         return contactList;
     }
+
+    public void deleteContact(SQLiteDatabase db, int inn_id) {
+        db.delete(TABLE_CONTACTS, KEY_ID + " =? ",
+            new String[]{Long.toString(inn_id)});
+    }
+
+    public int updateContact(SQLiteDatabase db, Contact contact) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, contact.getName());
+        values.put(KEY_TEL, contact.getTel());
+        int modified = db.update(TABLE_CONTACTS, values, KEY_ID + "= ?",
+                new String[]{String.valueOf(contact.getId())});
+        return modified;
+    }
 }
