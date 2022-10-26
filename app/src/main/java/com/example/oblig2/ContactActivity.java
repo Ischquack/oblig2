@@ -1,11 +1,14 @@
 package com.example.oblig2;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import java.util.List;
 
@@ -14,7 +17,7 @@ public class ContactActivity extends AppCompatActivity {
     EditText inName;
     EditText inTel;
     EditText inId;
-    TextView printContacts;
+    TableLayout printContacts;
     DBHandler dbHelper;
     SQLiteDatabase db;
 
@@ -25,14 +28,40 @@ public class ContactActivity extends AppCompatActivity {
     }
 
     public void printContacts(View v) {
-        String text = "";
         List<Contact> contacts = dbHelper.printContacts(db);
+        TableLayout tlPrintContacts = (TableLayout) findViewById(R.id.tlPrintContacts);
+        tlPrintContacts.removeAllViews();
+        TableRow tbRowHeader = new TableRow(this);
+        TextView tvId = new TextView(this);
+        tvId.setPadding(0,0,40,25);
+        tvId.setText("ID");
+        tbRowHeader.addView(tvId);
+        TextView tvName = new TextView(this);
+        tvName.setPadding(0,0,40,25);
+        tvName.setText("Name");
+        tbRowHeader.addView(tvName);
+        TextView tvTel = new TextView(this);
+        tvTel.setPadding(0,0,40,25);
+        tvTel.setText("Phone number");
+        tbRowHeader.addView(tvTel);
+        tlPrintContacts.addView(tbRowHeader);
+
         for (Contact contact : contacts) {
-            text = text + "Id: " + contact.getId() + ",Name: " +
-                    contact.getName() + " ,Tel: " +
-                    contact.getTel() + "\n";
+            TableRow tbRow  =  new TableRow(this);
+            TextView tv0 = new TextView(this);
+            tv0.setPadding(0,0,40,25);
+            tv0.setText(Integer.toString(contact.getId()));
+            tbRow.addView(tv0);
+            TextView tv1 = new TextView(this);
+            tv1.setPadding(0,0,40,25);
+            tv1.setText(contact.getName());
+            tbRow.addView(tv1);
+            TextView tv2 = new TextView(this);
+            tv2.setPadding(0,0,40,25);
+            tv2.setText(contact.getTel());
+            tbRow.addView(tv2);
+            tlPrintContacts.addView(tbRow);
         }
-        printContacts.setText(text);
     }
 
     public void deleteContact(View v) {
@@ -58,7 +87,7 @@ public class ContactActivity extends AppCompatActivity {
         inName = (EditText) findViewById(R.id.etInName);
         inTel = (EditText) findViewById(R.id.etInTel);
         inId = (EditText) findViewById(R.id.etInId);
-        printContacts = (TextView) findViewById(R.id.tvPrintContacts);
+        printContacts = (TableLayout) findViewById(R.id.tlPrintContacts);
         dbHelper = new DBHandler(this);
         db = dbHelper.getWritableDatabase();
 

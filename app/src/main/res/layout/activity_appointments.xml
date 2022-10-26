@@ -43,8 +43,8 @@
         app:layout_constraintStart_toEndOf="@+id/btnCreateAppointment"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
-    <TextView
-        android:id="@+id/tvPrintAppointments"
+    <TableLayout
+        android:id="@+id/tlPrintAppointments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Printed appointments"
