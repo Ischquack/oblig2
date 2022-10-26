@@ -1,9 +1,5 @@
 package com.example.oblig2;
 
-
-import java.sql.Time;
-import java.sql.Date;
-
 public class Appointment {
     private int id;
 

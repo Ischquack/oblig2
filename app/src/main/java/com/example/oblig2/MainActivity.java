@@ -2,19 +2,23 @@ package com.example.oblig2;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -22,6 +26,19 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     String CHANNEL_ID = "MyChannel";
+
+    public void checkPermissions() {
+        int MY_PERMISSIONS_REQUEST_SEND_SMS = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS);
+        int MY_PHONE_STATE_PERMISSION = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE);
+        if (MY_PERMISSIONS_REQUEST_SEND_SMS != PackageManager.PERMISSION_GRANTED ||
+                MY_PHONE_STATE_PERMISSION !=
+                        PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS,
+                    Manifest.permission.READ_PHONE_STATE}, 0);
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createNotificationChannel() {
@@ -49,19 +66,21 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Calendar cal = Calendar.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkPermissions();
         createNotificationChannel();
+        ContentValues values = new ContentValues();
+        values.put("Tel", "48484848484");
+        getContentResolver().insert(ContactProvider.CONTENT_URI, values);
         final Resources res = getResources();
-        Calendar cal = Calendar.getInstance();
-        long timeAt07_00 = cal.getTimeInMillis()-cal.getTimeInMillis()+1000*60*60*7;
+        long timeAt07_00 = 1000*60*60*7;
         getSharedPreferences("PREFERENCES", MODE_PRIVATE)
                 .edit()
                 .putString("StandardMessage", res.getString(R.string.standard_message))
                 .putLong("TimeOfDay", cal.getTimeInMillis())
                 .apply();
-        Log.d("shared", getSharedPreferences("PREFERENCES", MODE_PRIVATE)
-                .getString("StandardMessage", ""));
         BroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
         IntentFilter filter = new IntentFilter("com.example.service.MYSIGNAL");
         this.registerReceiver(myBroadcastReceiver, filter);
@@ -69,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnAddContact = (Button) findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(view -> {
-            Intent newIntent = new Intent(this, FriendsActivity.class);
+            Intent newIntent = new Intent(this, ContactActivity.class);
             MainActivity.this.startActivity(newIntent);
         });
 

@@ -7,10 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.List;
 
-public class FriendsActivity extends AppCompatActivity {
+public class ContactActivity extends AppCompatActivity {
 
     EditText inName;
     EditText inTel;
@@ -54,7 +53,7 @@ public class FriendsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+        setContentView(R.layout.activity_contact);
 
         inName = (EditText) findViewById(R.id.etInName);
         inTel = (EditText) findViewById(R.id.etInTel);
@@ -75,13 +74,4 @@ public class FriendsActivity extends AppCompatActivity {
         Button btnUpdateContact = (Button) findViewById(R.id.btnUpdateContact);
         btnUpdateContact.setOnClickListener(this::updateContact);
     }
-
-    /*@Override
-    protected void onDestroy() {
-        this.deleteDatabase("DB_AppointmentManager");
-        dbHelper.close();
-        super.onDestroy();
-    }*/
-
-
 }
