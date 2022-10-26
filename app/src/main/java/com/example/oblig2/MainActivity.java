@@ -11,10 +11,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     String CHANNEL_ID = "MyChannel";
@@ -48,16 +52,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createNotificationChannel();
-
+        final Resources res = getResources();
+        Calendar cal = Calendar.getInstance();
+        long timeAt07_00 = cal.getTimeInMillis()-cal.getTimeInMillis()+1000*60*60*7;
+        getSharedPreferences("PREFERENCES", MODE_PRIVATE)
+                .edit()
+                .putString("StandardMessage", res.getString(R.string.standard_message))
+                .putLong("TimeOfDay", cal.getTimeInMillis())
+                .apply();
+        Log.d("shared", getSharedPreferences("PREFERENCES", MODE_PRIVATE)
+                .getString("StandardMessage", ""));
         BroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
         IntentFilter filter = new IntentFilter("com.example.service.MYSIGNAL");
-        filter.addAction("com.example.service.MYSIGNAL");
         this.registerReceiver(myBroadcastReceiver, filter);
-        Intent myIntent = new Intent(this, MySendService.class);
-        this.startService(myIntent);
-        Intent intent = new Intent();
-        intent.setAction("com.example.service.MYSIGNAL");
-        sendBroadcast(intent);
+
 
         Button btnAddContact = (Button) findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(view -> {
@@ -69,6 +77,17 @@ public class MainActivity extends AppCompatActivity {
         btnAddAppointment.setOnClickListener(view -> {
             Intent newIntent = new Intent(this, AppointmentsActivity.class);
             MainActivity.this.startActivity(newIntent);
+        });
+
+        Switch swPeriodic = (Switch) findViewById(R.id.swPeriodic);
+        swPeriodic.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                Intent intent = new Intent();
+                intent.setAction("com.example.service.MYSIGNAL");
+                sendBroadcast(intent);
+            } else {
+                stopPeriodicService(swPeriodic);
+            }
         });
 
     }

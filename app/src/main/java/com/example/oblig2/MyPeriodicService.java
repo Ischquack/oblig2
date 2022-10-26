@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -32,8 +33,12 @@ public class MyPeriodicService extends Service {
         Intent i = new Intent(this, MySendService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, i, 0);
         AlarmManager alarm =(AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                60 * 1000, pendingIntent);
+
+        /*alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,  timeAt07_00,
+                AlarmManager.INTERVAL_DAY, pendingIntent);*/
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                getSharedPreferences("PREFERENCES", MODE_PRIVATE).getLong("TimeOfDay", 0),
+                1000*60, pendingIntent);
         return super.onStartCommand(intent, flags, startId);
     }
 

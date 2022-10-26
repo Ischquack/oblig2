@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DBHandler extends SQLiteOpenHelper {
     static String TABLE_APPOINTMENTS = "Appointments";
@@ -135,9 +136,11 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 Appointment appointment = new Appointment();
                 appointment.setTitle(cursor.getString(1));
-                if (appointment.getDate().equals(LocalDate.now().toString())) {
+                appointment.setDate(cursor.getString(2));
+                Log.d("test", appointment.getDate() + LocalDate.now().toString());
+                if (Objects.equals(appointment.getDate(), LocalDate.now().toString())) {
+                    Log.d("test", "Dates are matched");
                     appointment.setId(cursor.getInt(0));
-                    appointment.setDate(cursor.getString(2));
                     appointment.setTime(cursor.getString(3));
                     appointment.setPlace(cursor.getString(4));
                     appointment.setMsg(cursor.getString(5));
