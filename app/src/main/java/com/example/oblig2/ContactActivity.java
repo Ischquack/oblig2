@@ -42,15 +42,15 @@ public class ContactActivity extends AppCompatActivity {
         tlPrintContacts.removeAllViews();
         TableRow tbRowHeader = new TableRow(this);
         TextView tvId = new TextView(this);
-        tvId.setPadding(0,0,40,25);
+        tvId.setPadding(25,0,25,25);
         tvId.setText("ID");
         tbRowHeader.addView(tvId);
         TextView tvName = new TextView(this);
-        tvName.setPadding(0,0,40,25);
+        tvName.setPadding(25,0,25,25);
         tvName.setText("Name");
         tbRowHeader.addView(tvName);
         TextView tvTel = new TextView(this);
-        tvTel.setPadding(0,0,40,25);
+        tvTel.setPadding(25,0,25,25);
         tvTel.setText("Phone number");
         tbRowHeader.addView(tvTel);
         tlPrintContacts.addView(tbRowHeader);
@@ -58,15 +58,15 @@ public class ContactActivity extends AppCompatActivity {
         for (Contact contact : contacts) {
             TableRow tbRow  =  new TableRow(this);
             TextView tv0 = new TextView(this);
-            tv0.setPadding(0,0,40,25);
+            tv0.setPadding(25,0,25,20);
             tv0.setText(Integer.toString(contact.getId()));
             tbRow.addView(tv0);
             TextView tv1 = new TextView(this);
-            tv1.setPadding(0,0,40,25);
+            tv1.setPadding(25,0,25,20);
             tv1.setText(contact.getName());
             tbRow.addView(tv1);
             TextView tv2 = new TextView(this);
-            tv2.setPadding(0,0,40,25);
+            tv2.setPadding(25,0,25,20);
             tv2.setText(contact.getTel());
             tbRow.addView(tv2);
             tlPrintContacts.addView(tbRow);

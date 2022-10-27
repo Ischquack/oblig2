@@ -42,19 +42,19 @@ public class AppointmentsActivity extends AppCompatActivity {
         tlPrintAppointments.removeAllViews();
         TableRow tbRowHeader = new TableRow(this);
         TextView tvTitle = new TextView(this);
-        tvTitle.setPadding(0,0,40,25);
+        tvTitle.setPadding(25,0,25,25);
         tvTitle.setText("Title");
         tbRowHeader.addView(tvTitle);
         TextView tvDate = new TextView(this);
-        tvDate.setPadding(0,0,40,25);
+        tvDate.setPadding(25,0,25,25);
         tvDate.setText("Date");
         tbRowHeader.addView(tvDate);
         TextView tvTime = new TextView(this);
-        tvTime.setPadding(0,0,40,25);
+        tvTime.setPadding(25,0,25,25);
         tvTime.setText("Time");
         tbRowHeader.addView(tvTime);
         TextView tvPlace = new TextView(this);
-        tvPlace.setPadding(0,0,40,25);
+        tvPlace.setPadding(25,0,25,25);
         tvPlace.setText("Place");
         tbRowHeader.addView(tvPlace);
         tlPrintAppointments.addView(tbRowHeader);
@@ -62,19 +62,19 @@ public class AppointmentsActivity extends AppCompatActivity {
         for (Appointment appointment : appointments) {
             TableRow tbRow  =  new TableRow(this);
             TextView tv1 = new TextView(this);
-            tv1.setPadding(0,0,40,25);
+            tv1.setPadding(25,0,25,20);
             tv1.setText(appointment.getTitle());
             tbRow.addView(tv1);
             TextView tv2 = new TextView(this);
-            tv2.setPadding(0,0,40,25);
+            tv2.setPadding(25,0,25,20);
             tv2.setText(appointment.getDate());
             tbRow.addView(tv2);
             TextView tv3 = new TextView(this);
-            tv3.setPadding(0,0,40,25);
+            tv3.setPadding(25,0,25,20);
             tv3.setText(appointment.getTime());
             tbRow.addView(tv3);
             TextView tv4 = new TextView(this);
-            tv4.setPadding(0,0,40,25);
+            tv4.setPadding(25,0,25,20);
             tv4.setText(appointment.getPlace());
             tbRow.addView(tv4);
 
