@@ -2,8 +2,6 @@ package com.example.oblig2;
 
 public class Appointment {
     private int id;
-
-
     private String title;
     private String date;
     private String time;

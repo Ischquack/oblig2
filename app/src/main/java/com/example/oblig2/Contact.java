@@ -5,8 +5,6 @@ public class Contact {
     private String tel;
     private int id;
 
-
-
     public Contact(String name, String tel) {
         this.name = name;
         this.tel = tel;

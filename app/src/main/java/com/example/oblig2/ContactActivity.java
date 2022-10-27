@@ -93,6 +93,7 @@ public class ContactActivity extends AppCompatActivity {
         else resetInputFields();
     }
 
+    // Method that clears all the inputfields so that the user
     public void resetInputFields(){
         inName.setText("");
         inTel.setText("");
@@ -118,8 +119,6 @@ public class ContactActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,17 +129,21 @@ public class ContactActivity extends AppCompatActivity {
         inId = (EditText) findViewById(R.id.etInId);
         printContacts = (TableLayout) findViewById(R.id.tlPrintContacts);
         dbHelper = new DBHandler(this);
-        db = dbHelper.getWritableDatabase();
+        db = dbHelper.getWritableDatabase();    // db gets access to read and write in database
 
+        // Add contact button
         Button btnAdd = (Button) findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this::addContact);
 
+        // Print contacts button
         Button btnPrintContacts = (Button) findViewById(R.id.btnPrintContacts);
         btnPrintContacts.setOnClickListener(this::printContacts);
 
+        // Delete contact  button
         Button btnDeleteContact = (Button) findViewById(R.id.btnDel);
         btnDeleteContact.setOnClickListener(this::deleteContact);
 
+        // Update contact button
         Button btnUpdateContact = (Button) findViewById(R.id.btnUpdateContact);
         btnUpdateContact.setOnClickListener(this::updateContact);
     }
