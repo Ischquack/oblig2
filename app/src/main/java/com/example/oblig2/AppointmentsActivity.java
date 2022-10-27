@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
@@ -23,10 +25,15 @@ public class AppointmentsActivity extends AppCompatActivity {
     SQLiteDatabase db;
 
     public void createAppointment(View v) {
-        Appointment appointment = new Appointment(inTitle.getText().toString(),
-                inDate.getText().toString(), inTime.getText().toString(),
-                inPlace.getText().toString(), inMsg.getText().toString());
-        dbHelper.createAppointment(db, appointment);
+        if(validateInput()){
+            Appointment appointment = new Appointment(inTitle.getText().toString(),
+                    inDate.getText().toString(), inTime.getText().toString(),
+                    inPlace.getText().toString(), inMsg.getText().toString());
+            resetInputFields();
+            dbHelper.createAppointment(db, appointment);
+            printAppointment(v);
+        }
+        else resetInputFields();
     }
 
     public void printAppointment(View v) {
@@ -77,7 +84,41 @@ public class AppointmentsActivity extends AppCompatActivity {
 
     public void deleteAppointment(View v) {
         String title = inTitle.getText().toString();
+        resetInputFields();
         dbHelper.deleteContact(db, title);
+        printAppointment(v);
+    }
+
+    public void resetInputFields(){
+        inTitle.setText("");
+        inDate.setText("");
+        inTime.setText("");
+        inPlace.setText("");
+        inMsg.setText("");
+    }
+
+    public boolean validateInput(){
+        String regexTitle = "[A-Za-zÆØÅæøå \\-]{2,25}";
+        String titleTest = inTitle.getText().toString();
+        String regexDate = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
+        String dateTest = inDate.getText().toString();
+        String regexTime = "[0-2][0-9]:[0-5][0-9]";
+        String timeTest = inTime.getText().toString();
+        boolean ok = titleTest.matches(regexTitle) && dateTest.matches(regexDate) &&
+                timeTest.matches(regexTime);
+        if (!ok){
+            if(!titleTest.matches(regexTitle)){
+                Toast.makeText(this,"Title",Toast.LENGTH_LONG).show();
+            }
+            if(!dateTest.matches(regexDate)){
+                Toast.makeText(this,"Date",Toast.LENGTH_LONG).show();
+            }
+            if(!timeTest.matches(regexTime)){
+                Toast.makeText(this,"Time",Toast.LENGTH_LONG).show();
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -4,12 +4,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 
 public class ContactActivity extends AppCompatActivity {
@@ -22,9 +26,14 @@ public class ContactActivity extends AppCompatActivity {
     SQLiteDatabase db;
 
     public void addContact(View v) {
-        Contact contact = new Contact(inName.getText().toString(),
-                inTel.getText().toString());
-        dbHelper.addContact(db, contact);
+        if(validateInput()){
+            Contact contact = new Contact(inName.getText().toString(),
+                    inTel.getText().toString());
+            resetInputFields();
+            dbHelper.addContact(db, contact);
+            printContacts(v);
+        }
+        else resetInputFields();
     }
 
     public void printContacts(View v) {
@@ -66,15 +75,46 @@ public class ContactActivity extends AppCompatActivity {
 
     public void deleteContact(View v) {
         int id = (Integer.parseInt(inId.getText().toString()));
+        resetInputFields();
         dbHelper.deleteContact(db,id);
+        printContacts(v);
     }
 
     public void updateContact(View v) {
-        Contact contact = new Contact();
-        contact.setName(inName.getText().toString());
-        contact.setTel(inTel.getText().toString());
-        contact.setId(Integer.parseInt(inId.getText().toString()));
-        dbHelper.updateContact(db, contact);
+        if(validateInput()){
+            Contact contact = new Contact();
+            contact.setName(inName.getText().toString());
+            contact.setTel(inTel.getText().toString());
+            contact.setId(Integer.parseInt(inId.getText().toString()));
+            resetInputFields();
+            dbHelper.updateContact(db, contact);
+            printContacts(v);
+        }
+        else resetInputFields();
+    }
+
+    public void resetInputFields(){
+        inName.setText("");
+        inTel.setText("");
+        inId.setText("");
+    }
+
+    public boolean validateInput(){
+        String regexNavn = "[A-Za-zÆØÅæøå \\-]{2,25}";
+        String nameTest = inName.getText().toString();
+        String regexTel = "[0-9]{8}";
+        String telTest = inTel.getText().toString();
+        boolean ok = nameTest.matches(regexNavn) && telTest.matches(regexTel);
+        if (!ok){
+            if(!nameTest.matches(regexNavn)){
+                Toast.makeText(this,"Name",Toast.LENGTH_LONG).show();
+            }
+            if(!telTest.matches(regexTel)){
+                Toast.makeText(this,"Phone number",Toast.LENGTH_LONG).show();
+            }
+            return false;
+        }
+        return true;
     }
 
 
