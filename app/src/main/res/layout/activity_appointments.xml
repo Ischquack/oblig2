@@ -17,7 +17,7 @@
         android:id="@+id/btnPrintAppointments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         android:text="Print"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,7 @@
         android:id="@+id/tlPrintAppointments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Printed appointments"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="528dp" />
+        app:layout_constraintGuide_percent="0.7" />
 
     <EditText
         android:id="@+id/etInDate"
