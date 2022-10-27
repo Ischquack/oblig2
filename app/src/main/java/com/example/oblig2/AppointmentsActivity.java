@@ -98,7 +98,7 @@ public class AppointmentsActivity extends AppCompatActivity {
     }
 
     public boolean validateInput(){
-        String regexTitle = "[A-Za-zÆØÅæøå \\-]{2,25}";
+        String regexTitle = "[A-Za-zÆØÅæøå0-9.!?/ \\-]{0,25}";
         String titleTest = inTitle.getText().toString();
         String regexDate = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
         String dateTest = inDate.getText().toString();
@@ -108,15 +108,17 @@ public class AppointmentsActivity extends AppCompatActivity {
                 timeTest.matches(regexTime);
         if (!ok){
             if(!titleTest.matches(regexTitle)){
-                Toast.makeText(this,"Title",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Title too long",Toast.LENGTH_LONG).show();
+                return false;
             }
             if(!dateTest.matches(regexDate)){
-                Toast.makeText(this,"Date",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Wrong format date",Toast.LENGTH_LONG).show();
+                return false;
             }
             if(!timeTest.matches(regexTime)){
-                Toast.makeText(this,"Time",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Wrong format time",Toast.LENGTH_LONG).show();
+                return false;
             }
-            return false;
         }
         return true;
     }

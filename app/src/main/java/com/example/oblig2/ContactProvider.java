@@ -17,10 +17,6 @@ public class ContactProvider extends ContentProvider {
     SQLiteDatabase db;
     private final static String TABLE_CONTACTS = DBHandler.TABLE_CONTACTS;
     public static final String KEY_ID_CONTACTS = DBHandler.KEY_ID_CONTACTS;
-    public static final String NAME_CONTACTS = DBHandler.NAME_CONTACTS;
-    private static final String TEL_CONTACTS = DBHandler.TEL_CONTACTS;
-    private static final String DATABASE_NAME = DBHandler.DATABASE_NAME;
-    private static final int DATABASE_VERSION = DBHandler.DATABASE_VERSION;
     public final static String PROVIDER = "com.example.oblig2";
     private static final int CONTACTS = 1;
     private static final int MCONTACTS = 2;
@@ -75,11 +71,32 @@ public class ContactProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+        if (uriMatcher.match(uri) == CONTACTS) {
+            db.delete(TABLE_CONTACTS, KEY_ID_CONTACTS + "=" +
+                    uri.getPathSegments().get(1), strings);
+            getContext().getContentResolver().notifyChange(uri, null);
+            return 1;
+        }
+        if (uriMatcher.match(uri) == MCONTACTS) {
+            db.delete(TABLE_CONTACTS, null, null);
+            getContext().getContentResolver().notifyChange(uri, null);
+            return 2;
+        }
         return 0;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+        if (uriMatcher.match(uri) == CONTACTS) {
+            db.update(TABLE_CONTACTS, contentValues, KEY_ID_CONTACTS + "=" + uri.getPathSegments().get(1), null);
+            getContext().getContentResolver().notifyChange(uri, null);
+            return 1;
+        }
+        if (uriMatcher.match(uri) == MCONTACTS) {
+            db.update(TABLE_CONTACTS, null, null, null);
+            getContext().getContentResolver().notifyChange(uri, null);
+            return 2;
+        }
         return 0;
     }
 }

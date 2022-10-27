@@ -102,17 +102,18 @@ public class ContactActivity extends AppCompatActivity {
     public boolean validateInput(){
         String regexNavn = "[A-Za-zÆØÅæøå \\-]{2,25}";
         String nameTest = inName.getText().toString();
-        String regexTel = "[0-9]{8}";
+        String regexTel = "[0-9]{8,12}";
         String telTest = inTel.getText().toString();
         boolean ok = nameTest.matches(regexNavn) && telTest.matches(regexTel);
         if (!ok){
             if(!nameTest.matches(regexNavn)){
-                Toast.makeText(this,"Name",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Invalid name given",Toast.LENGTH_LONG).show();
+                return false;
             }
             if(!telTest.matches(regexTel)){
-                Toast.makeText(this,"Phone number",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Invalid number",Toast.LENGTH_LONG).show();
+                return false;
             }
-            return false;
         }
         return true;
     }

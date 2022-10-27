@@ -11,7 +11,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,10 +21,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
-import java.util.Calendar;
-
 public class MainActivity extends AppCompatActivity {
-    String CHANNEL_ID = "MyChannel";
 
     public void checkPermissions() {
         int MY_PERMISSIONS_REQUEST_SEND_SMS = ContextCompat.checkSelfPermission(this,
@@ -44,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private void createNotificationChannel() {
         CharSequence name = getString(R.string.channel_name);
         String description = getString(R.string.channel_description);
+        String id = getString(R.string.channel_id);
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new
-                NotificationChannel(CHANNEL_ID, name, importance);
+                NotificationChannel(id, name, importance);
         channel.setDescription(description);
         NotificationManager notificationManager =
                 getSystemService(NotificationManager.class);
@@ -66,39 +63,35 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Calendar cal = Calendar.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermissions();
         createNotificationChannel();
-        ContentValues values = new ContentValues();
-        values.put("Tel", "48484848484");
-        getContentResolver().insert(ContactProvider.CONTENT_URI, values);
         final Resources res = getResources();
         long timeAt07_00 = 1000*60*60*7;
         getSharedPreferences("PREFERENCES", MODE_PRIVATE)
                 .edit()
                 .putString("StandardMessage", res.getString(R.string.standard_message))
-                .putLong("TimeOfDay", cal.getTimeInMillis())
+                .putLong("TimeOfDay", timeAt07_00)
                 .apply();
         BroadcastReceiver myBroadcastReceiver = new MyBroadcastReceiver();
         IntentFilter filter = new IntentFilter("com.example.service.MYSIGNAL");
         this.registerReceiver(myBroadcastReceiver, filter);
 
 
-        Button btnAddContact = (Button) findViewById(R.id.btnAddContact);
+        Button btnAddContact = findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(view -> {
             Intent newIntent = new Intent(this, ContactActivity.class);
             MainActivity.this.startActivity(newIntent);
         });
 
-        Button btnAddAppointment = (Button) findViewById(R.id.btnAddAppointment);
+        Button btnAddAppointment = findViewById(R.id.btnAddAppointment);
         btnAddAppointment.setOnClickListener(view -> {
             Intent newIntent = new Intent(this, AppointmentsActivity.class);
             MainActivity.this.startActivity(newIntent);
         });
 
-        Switch swPeriodic = (Switch) findViewById(R.id.swPeriodic);
+        Switch swPeriodic = findViewById(R.id.swPeriodic);
         swPeriodic.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 Intent intent = new Intent();
