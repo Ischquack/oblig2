@@ -27,24 +27,29 @@ public class ContactActivity extends AppCompatActivity {
 
     public void addContact(View v) {
         if(validateInput()){
+            //Creates contact object that receives values from input fields in its constructor
             Contact contact = new Contact(inName.getText().toString(),
                     inTel.getText().toString());
-            resetInputFields();
-            dbHelper.addContact(db, contact);
+            resetInputFields();     // All EditTexts gets cleared
+            dbHelper.addContact(db, contact);   // Uses dbHelper to access the database
             printContacts(v);
         }
         else resetInputFields();
     }
 
+    //Method that prints the whole Contacts database table to the view.
     public void printContacts(View v) {
-        List<Contact> contacts = dbHelper.printContacts(db);
+        List<Contact> contacts = dbHelper.printContacts(db);    // Retrieves the Contact table
+        // A TableLayout view is created inside a SrollView from activity_contact.xml.:
         TableLayout tlPrintContacts = (TableLayout) findViewById(R.id.tlPrintContacts);
+        // Removes the printed table before printing the updated table
         tlPrintContacts.removeAllViews();
-        TableRow tbRowHeader = new TableRow(this);
-        TextView tvId = new TextView(this);
-        tvId.setPadding(25,0,25,25);
+        // This code section handles the table header:
+        TableRow tbRowHeader = new TableRow(this);  // New TableRow inside TableLayout
+        TextView tvId = new TextView(this);         // New TextView (column) inside TableRow
+        tvId.setPadding(25,0,25,25);  // Handles spacing between elements
         tvId.setText("ID");
-        tbRowHeader.addView(tvId);
+        tbRowHeader.addView(tvId);                          // Adds column til row
         TextView tvName = new TextView(this);
         tvName.setPadding(25,0,25,25);
         tvName.setText("Name");
@@ -53,8 +58,9 @@ public class ContactActivity extends AppCompatActivity {
         tvTel.setPadding(25,0,25,25);
         tvTel.setText("Phone number");
         tbRowHeader.addView(tvTel);
-        tlPrintContacts.addView(tbRowHeader);
+        tlPrintContacts.addView(tbRowHeader);               // Adds TableRow to the TableLayout
 
+        // This code section adds a new row for each contact and columns containing contact data
         for (Contact contact : contacts) {
             TableRow tbRow  =  new TableRow(this);
             TextView tv0 = new TextView(this);
@@ -93,19 +99,23 @@ public class ContactActivity extends AppCompatActivity {
         else resetInputFields();
     }
 
-    // Method that clears all the inputfields so that the user
+    // Method that clears all EditTexts. Gets called in addContact(), updateContact()
+    // and deleteContact()
     public void resetInputFields(){
         inName.setText("");
         inTel.setText("");
         inId.setText("");
     }
 
+    // Method that handles input validation when adding and updating contacts
     public boolean validateInput(){
-        String regexNavn = "[A-Za-zÆØÅæøå \\-]{2,25}";
+        String regexNavn = "[A-Za-zÆØÅæøå \\-]{2,25}";      // 2-25 characters
         String nameTest = inName.getText().toString();
-        String regexTel = "[0-9]{8,12}";
+        String regexTel = "[0-9]{8,12}";                    // 8-12 digits
         String telTest = inTel.getText().toString();
+        // ok variable tests if the inputs pass the regular expressions provided
         boolean ok = nameTest.matches(regexNavn) && telTest.matches(regexTel);
+
         if (!ok){
             if(!nameTest.matches(regexNavn)){
                 Toast.makeText(this,"Invalid name given",Toast.LENGTH_LONG).show();
@@ -116,7 +126,7 @@ public class ContactActivity extends AppCompatActivity {
                 return false;
             }
         }
-        return true;
+        return true;                                // If ok variable returned true
     }
 
     @Override

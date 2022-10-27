@@ -12,17 +12,25 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/** This ContactProvider class gives other applications the opportunity to access data from the
+    Contact table in the database.
+*/
+
 public class ContactProvider extends ContentProvider {
     DBHandler dbHelper;
     SQLiteDatabase db;
+
     private final static String TABLE_CONTACTS = DBHandler.TABLE_CONTACTS;
     public static final String KEY_ID_CONTACTS = DBHandler.KEY_ID_CONTACTS;
-    public final static String PROVIDER = "com.example.oblig2";
+    public final static String PROVIDER = "com.example.oblig2";     // Provider path
+    // Variables  used for comparison:
     private static final int CONTACTS = 1;
     private static final int MCONTACTS = 2;
 
+    // CONTENT_URI was used when we tested this ContentProvider
     public static final Uri CONTENT_URI = Uri.parse("content://" + PROVIDER + "/Contacts");
     private static final UriMatcher uriMatcher;
+    // Adding uri's to uriMatcher for later comparison:
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(PROVIDER, "Contacts", MCONTACTS);
@@ -36,14 +44,19 @@ public class ContactProvider extends ContentProvider {
         return true;
     }
 
+    // Method for making queries to database
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        Cursor cur = db.query(TABLE_CONTACTS, strings, KEY_ID_CONTACTS+"="+uri.getPathSegments().get(1), null, null, null, null);
+    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s,
+                        @Nullable String[] strings1, @Nullable String s1) {
+        Cursor cur = db.query(TABLE_CONTACTS, strings,
+                KEY_ID_CONTACTS+"="+uri.getPathSegments().get(1),
+                null, null, null, null);
         Log.d("cursor", cur.toString());
         return cur;
     }
 
+    // Method that checks uris and returns access to either table or item in table
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
@@ -58,17 +71,20 @@ public class ContactProvider extends ContentProvider {
         }
     }
 
+    // Method for adding a contact to database
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         db.insert(TABLE_CONTACTS, null, contentValues);
-        Cursor cur = db.query(TABLE_CONTACTS, null, null, null, null, null, null);
+        Cursor cur = db.query(TABLE_CONTACTS, null, null, null,
+                null, null, null);
         cur.moveToLast();
         long myId = cur.getLong(0);
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, myId);
     }
 
+    // Method for deleting a contact from database
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         if (uriMatcher.match(uri) == CONTACTS) {
@@ -85,10 +101,13 @@ public class ContactProvider extends ContentProvider {
         return 0;
     }
 
+    // Method for updating a contact in the database
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s,
+                      @Nullable String[] strings) {
         if (uriMatcher.match(uri) == CONTACTS) {
-            db.update(TABLE_CONTACTS, contentValues, KEY_ID_CONTACTS + "=" + uri.getPathSegments().get(1), null);
+            db.update(TABLE_CONTACTS, contentValues, KEY_ID_CONTACTS + "=" +
+                    uri.getPathSegments().get(1), null);
             getContext().getContentResolver().notifyChange(uri, null);
             return 1;
         }

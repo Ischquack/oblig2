@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
+/** This activity handles appointments. There are a lot of similarities to ContactActivity in this
+    code. ContactActivity contains more detailed comments and explanations in the code. */
+
 public class AppointmentsActivity extends AppCompatActivity {
 
     EditText inTitle;
@@ -98,14 +101,17 @@ public class AppointmentsActivity extends AppCompatActivity {
     }
 
     public boolean validateInput(){
-        String regexTitle = "[A-Za-zÆØÅæøå0-9.!?/ \\-]{0,25}";
+        String regexTitle = "[A-Za-zÆØÅæøå0-9.!?/ \\-]{0,25}";      // 0-25 characters allowed
         String titleTest = inTitle.getText().toString();
+        // regexDate requires date input as: yyyy--mm-dd
         String regexDate = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
         String dateTest = inDate.getText().toString();
+        // regexTime requires date input as: hh:mm
         String regexTime = "[0-2][0-9]:[0-5][0-9]";
         String timeTest = inTime.getText().toString();
         boolean ok = titleTest.matches(regexTitle) && dateTest.matches(regexDate) &&
                 timeTest.matches(regexTime);
+
         if (!ok){
             if(!titleTest.matches(regexTitle)){
                 Toast.makeText(this,"Title too long",Toast.LENGTH_LONG).show();

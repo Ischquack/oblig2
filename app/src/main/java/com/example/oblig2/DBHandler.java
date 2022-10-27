@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/* Class that handles all database handling. Other classes uses an instance of this class to
+/** Class that handles all database handling. Other classes uses an instance of this class to
 * communicate with the database. */
 
 public class DBHandler extends SQLiteOpenHelper {

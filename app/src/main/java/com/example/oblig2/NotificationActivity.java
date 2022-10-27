@@ -5,6 +5,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/** Activity the user access when clicking on the notification. It contains all info from the
+ corresponding appointment */
+
 public class NotificationActivity extends AppCompatActivity {
 
     @Override

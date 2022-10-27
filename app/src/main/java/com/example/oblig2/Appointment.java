@@ -25,6 +25,7 @@ public class Appointment {
     public void setId(int id) {
         this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
@@ -48,6 +49,7 @@ public class Appointment {
     public void setTime(String time) {
         this.time = time;
     }
+
     public String getPlace() {
         return place;
     }

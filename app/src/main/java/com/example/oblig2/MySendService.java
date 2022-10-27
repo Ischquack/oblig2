@@ -23,9 +23,10 @@ public class MySendService extends Service {
 
     public void sendSMS(String msg) {
             List<Contact> contacts = dbHelper.printContacts(db);
-            for (Contact contact : contacts) {
+            for (Contact contact : contacts) {      // Sends sms to each contact from db
                 SmsManager smsMan = SmsManager.getDefault();
-                smsMan.sendTextMessage(contact.getTel(), null, msg, null, null);
+                smsMan.sendTextMessage(contact.getTel(),
+                        null, msg, null, null);
             }
     }
 
@@ -41,10 +42,13 @@ public class MySendService extends Service {
 
         NotificationManager notificationManager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
+        // Intent  that launches NotificationActivity
         Intent i = new Intent(this, NotificationActivity.class);
-        List<Appointment> todaysAppointments = dbHelper.findAppointments(db);
+
+        List<Appointment> todaysAppointments = dbHelper.findAppointments(db); //Today´s appointments
+
         for (Appointment app : todaysAppointments) {
-            if (app.getMsg().isEmpty()) {
+            if (app.getMsg().isEmpty()) {   // If no message was provided, get from SharedPref.
                 app.setMsg(getSharedPreferences("PREFERENCES", MODE_PRIVATE)
                         .getString("StandardMessage", ""));
             }
@@ -53,16 +57,22 @@ public class MySendService extends Service {
             i.putExtra("EXTRA_TIME", app.getTime());
             i.putExtra("EXTRA_PLACE", app.getPlace());
             i.putExtra("EXTRA_MSG", app.getMsg());
+            // Pending intent that contains the NotificationActivity intent i:
             PendingIntent pIntent = PendingIntent.getActivity(this, 0,
                     i, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            sendSMS(app.getMsg());
+            String sms = "Today " + app.getTime() + " o'clock at " + app.getPlace() + ": \n"
+                    + app.getMsg();
+            sendSMS(sms);
 
-            Notification notification = new NotificationCompat.Builder(this, "MyChannel")
+            // Create new notification
+            Notification notification = new NotificationCompat.Builder(this,
+                    "MyChannel")
                     .setContentTitle(app.getTitle())
                     .setContentText(app.getMsg())
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    // The notification implements pIntent so user can click and launch NotifAct.
                     .setContentIntent(pIntent).build();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notificationManager.notify(app.getId(), notification);

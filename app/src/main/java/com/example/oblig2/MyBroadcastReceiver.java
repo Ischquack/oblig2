@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/** This receiver starts the MyPeriodicService service */
+
 public class MyBroadcastReceiver extends BroadcastReceiver {
     public MyBroadcastReceiver(){}
 

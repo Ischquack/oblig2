@@ -16,14 +16,19 @@ public class MyPeriodicService extends Service {
         return null;
     }
 
+    /** This service starts MySendService and defines when to do so */
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Intent i = new Intent(this, MySendService.class);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 0, i, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(this,
+                0, i, 0);
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        // Retrieves "TimeOfDay from SharedPreferences:"
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                getSharedPreferences("PREFERENCES", MODE_PRIVATE).getLong("TimeOfDay", 0),
-                1000*60, pendingIntent);
+                getSharedPreferences("PREFERENCES", MODE_PRIVATE).getLong
+                        ("TimeOfDay", 0),
+                AlarmManager.INTERVAL_DAY, pendingIntent);  // Daily interval
         return super.onStartCommand(intent, flags, startId);
     }
 
